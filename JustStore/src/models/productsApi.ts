@@ -1,5 +1,5 @@
 import { LocalKey } from "ts-localstorage";
-import { IProduct } from "../api/api";
+import { IProduct } from "../app/api";
 
 export interface IProductsApi {
   _allProductsKey: LocalKey<Array<IProduct>>;

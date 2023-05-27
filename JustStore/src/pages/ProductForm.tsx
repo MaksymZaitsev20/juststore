@@ -2,7 +2,7 @@ import { Button, Container, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { api } from "../productsApi";
-import { IProduct } from "../api/api";
+import { IProduct } from "../app/api";
 
 const ProductForm = () => {
   const { control, handleSubmit, reset } = useForm<IProduct>({

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import CatalogProductCard from "../components/CatalogProductCard";
 import { api } from "../productsApi";
 import SideBar from "../components/SideBar";
-import { IProduct } from "../api/api";
+import { IProduct } from "../app/api";
 
 const Home = () => {
   const [products, setProducts] = useState<IProduct[] | []>([]);

@@ -1,5 +1,5 @@
 import { Stack, Typography } from "@mui/material";
-import { IProduct } from "../api/api";
+import { IProduct } from "../app/api";
 import { useAppSelector } from "../app/hooks";
 import BasketProductCard from "../components/BasketProductCard";
 import { api } from "../productsApi";

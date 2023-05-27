@@ -7,7 +7,7 @@ import {
   OneplusImage,
   SamsungGalaxyImage,
 } from "./images";
-import { IProduct } from "../api/api";
+import { IProduct } from "../app/api";
 
 export const products: IProduct[] = [
   {

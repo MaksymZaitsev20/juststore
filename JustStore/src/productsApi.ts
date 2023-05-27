@@ -1,169 +1,171 @@
-import {LocalKey, LocalStorage} from "ts-localstorage";
-import {DefaultProductImage} from "./constants/images";
-import {products} from "./constants/products";
-import {IProductsApi} from "./models/productsApi";
-import {IProduct} from "./api/api";
+import { LocalKey, LocalStorage } from "ts-localstorage";
+import { DefaultProductImage } from "./constants/images";
+import { products } from "./constants/products";
+import { IProductsApi } from "./models/productsApi";
+import { IProduct } from "./app/api";
 
 export const api: IProductsApi = {
-    _allProductsKey: new LocalKey("products", new Array<IProduct>()),
-    _basketProductsKey: new LocalKey("basketProducts", new Array<number>()),
+  _allProductsKey: new LocalKey("products", new Array<IProduct>()),
+  _basketProductsKey: new LocalKey("basketProducts", new Array<number>()),
 
-    async getProducts(): Promise<IProduct[] | []> {
-        let allProducts = LocalStorage.getItem(this._allProductsKey);
+  async getProducts(): Promise<IProduct[] | []> {
+    let allProducts = LocalStorage.getItem(this._allProductsKey);
 
-        if (!allProducts) {
-            LocalStorage.setItem(this._allProductsKey, products);
-            return LocalStorage.getItem(this._allProductsKey)!;
-        }
+    if (!allProducts) {
+      LocalStorage.setItem(this._allProductsKey, products);
+      return LocalStorage.getItem(this._allProductsKey)!;
+    }
 
-        return allProducts;
-    },
+    return allProducts;
+  },
 
-    async getProduct(id: number): Promise<IProduct | null> {
-        const products = LocalStorage.getItem(this._allProductsKey);
+  async getProduct(id: number): Promise<IProduct | null> {
+    const products = LocalStorage.getItem(this._allProductsKey);
 
-        if (!products) {
-            return null;
-        }
+    if (!products) {
+      return null;
+    }
 
-        const product = products.find((product) => product.id === id);
+    const product = products.find((product) => product.id === id);
 
-        if (!product) {
-            return null;
-        }
+    if (!product) {
+      return null;
+    }
 
-        return product;
-    },
+    return product;
+  },
 
-    async createProduct(
-        name: string,
-        price: number,
-        description: string,
-        category: string,
-        imageUrl: string = DefaultProductImage
-    ): Promise<void> {
-        let products: IProduct[] | null = LocalStorage.getItem(this._allProductsKey);
-        let id: number;
+  async createProduct(
+    name: string,
+    price: number,
+    description: string,
+    category: string,
+    imageUrl: string = DefaultProductImage
+  ): Promise<void> {
+    let products: IProduct[] | null = LocalStorage.getItem(
+      this._allProductsKey
+    );
+    let id: number;
 
-        if (!products) {
-            products = new Array<IProduct>();
-            id = 1;
-        } else {
-            id =
-                products.reduce((previousProduct, currentProduct) =>
-                    previousProduct.id < currentProduct.id
-                        ? currentProduct
-                        : previousProduct
-                ).id + 1;
-        }
+    if (!products) {
+      products = new Array<IProduct>();
+      id = 1;
+    } else {
+      id =
+        products.reduce((previousProduct, currentProduct) =>
+          previousProduct.id < currentProduct.id
+            ? currentProduct
+            : previousProduct
+        ).id + 1;
+    }
 
-        products.push({id, name, description, category, price, imageUrl});
+    products.push({ id, name, description, category, price, imageUrl });
 
-        LocalStorage.setItem(this._allProductsKey, products);
-    },
+    LocalStorage.setItem(this._allProductsKey, products);
+  },
 
-    async updateProduct(id: number, newProduct: IProduct): Promise<boolean> {
-        const products = LocalStorage.getItem(this._allProductsKey);
+  async updateProduct(id: number, newProduct: IProduct): Promise<boolean> {
+    const products = LocalStorage.getItem(this._allProductsKey);
 
-        if (!products) {
-            return false;
-        }
+    if (!products) {
+      return false;
+    }
 
-        const index = products.findIndex((product) => product.id === id);
+    const index = products.findIndex((product) => product.id === id);
 
-        if (index === -1) {
-            return false;
-        }
+    if (index === -1) {
+      return false;
+    }
 
-        products[index] = newProduct;
-        LocalStorage.setItem(this._allProductsKey, products);
+    products[index] = newProduct;
+    LocalStorage.setItem(this._allProductsKey, products);
 
-        return true;
-    },
+    return true;
+  },
 
-    async deleteProduct(id: number): Promise<IProduct | undefined> {
-        const products = LocalStorage.getItem(this._allProductsKey);
+  async deleteProduct(id: number): Promise<IProduct | undefined> {
+    const products = LocalStorage.getItem(this._allProductsKey);
 
-        if (!products) {
-            return undefined;
-        }
+    if (!products) {
+      return undefined;
+    }
 
-        const index = products.findIndex((product) => product.id === id);
+    const index = products.findIndex((product) => product.id === id);
 
-        if (index === -1) {
-            return undefined;
-        }
+    if (index === -1) {
+      return undefined;
+    }
 
-        const product = products.splice(index, 1)[0];
-        LocalStorage.setItem(this._allProductsKey, products);
+    const product = products.splice(index, 1)[0];
+    LocalStorage.setItem(this._allProductsKey, products);
 
-        return product;
-    },
+    return product;
+  },
 
-    getBasketProducts(): IProduct[] | [] {
-        const basketProductsIds = LocalStorage.getItem(this._basketProductsKey);
-        const products = LocalStorage.getItem(this._allProductsKey);
+  getBasketProducts(): IProduct[] | [] {
+    const basketProductsIds = LocalStorage.getItem(this._basketProductsKey);
+    const products = LocalStorage.getItem(this._allProductsKey);
 
-        if (!basketProductsIds || !products) {
-            return [];
-        }
+    if (!basketProductsIds || !products) {
+      return [];
+    }
 
-        return products.filter((product) => basketProductsIds.includes(product.id));
-    },
+    return products.filter((product) => basketProductsIds.includes(product.id));
+  },
 
-    addProductToBasket(id: number): boolean {
-        const products = LocalStorage.getItem(this._allProductsKey);
-        let basketProducts = LocalStorage.getItem(this._basketProductsKey);
+  addProductToBasket(id: number): boolean {
+    const products = LocalStorage.getItem(this._allProductsKey);
+    let basketProducts = LocalStorage.getItem(this._basketProductsKey);
 
-        if (!products) {
-            return false;
-        }
+    if (!products) {
+      return false;
+    }
 
-        if (!basketProducts) {
-            basketProducts = new Array<number>();
-        }
+    if (!basketProducts) {
+      basketProducts = new Array<number>();
+    }
 
-        const index = products.findIndex((product) => product.id === id);
+    const index = products.findIndex((product) => product.id === id);
 
-        if (index === -1) {
-            return false;
-        }
+    if (index === -1) {
+      return false;
+    }
 
-        basketProducts.push(products[index].id);
-        LocalStorage.setItem(this._basketProductsKey, basketProducts);
+    basketProducts.push(products[index].id);
+    LocalStorage.setItem(this._basketProductsKey, basketProducts);
 
-        return true;
-    },
+    return true;
+  },
 
-    removeProductFromBasket(id: number): boolean {
-        const productIds = LocalStorage.getItem(this._basketProductsKey);
+  removeProductFromBasket(id: number): boolean {
+    const productIds = LocalStorage.getItem(this._basketProductsKey);
 
-        if (!productIds) {
-            return false;
-        }
+    if (!productIds) {
+      return false;
+    }
 
-        const index = productIds.findIndex((productId) => productId === id);
+    const index = productIds.findIndex((productId) => productId === id);
 
-        if (index === -1) {
-            return false;
-        }
+    if (index === -1) {
+      return false;
+    }
 
-        productIds.splice(index, 1);
-        LocalStorage.setItem(this._basketProductsKey, productIds);
+    productIds.splice(index, 1);
+    LocalStorage.setItem(this._basketProductsKey, productIds);
 
-        return true;
-    },
+    return true;
+  },
 
-    async clearBasket(): Promise<void> {
-        LocalStorage.removeItem(this._basketProductsKey);
-    },
+  async clearBasket(): Promise<void> {
+    LocalStorage.removeItem(this._basketProductsKey);
+  },
 
-    getCategories(): string[] | [] {
-        const products = LocalStorage.getItem(this._allProductsKey);
-        const categories = Array.from(
-            new Set(products?.map((product) => product.category))
-        );
+  getCategories(): string[] | [] {
+    const products = LocalStorage.getItem(this._allProductsKey);
+    const categories = Array.from(
+      new Set(products?.map((product) => product.category))
+    );
 
-        return categories || [];
-    },
+    return categories || [];
+  },
 };

@@ -1,3 +1,3 @@
-import { ProductsClient } from "./api";
+import { ProductClient } from "./api";
 
-export const productsClient = new ProductsClient();
+export const productClient = new ProductClient();

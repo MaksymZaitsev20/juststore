@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import CatalogProductCard from "../components/CatalogProductCard";
 import { api } from "../productsApi";
 import SideBar from "../components/SideBar";
-import { IProduct } from "../app/api";
+import { Product } from "../app/api";
 
 const Home = () => {
-  const [products, setProducts] = useState<IProduct[] | []>([]);
+  const [products, setProducts] = useState<Product[] | []>([]);
   const [category, setCategory] = useState<string>("");
 
   useEffect(() => {

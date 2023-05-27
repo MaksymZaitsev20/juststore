@@ -2,10 +2,10 @@ import { Button, Container, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { api } from "../productsApi";
-import { IProduct } from "../app/api";
+import { Product } from "../app/api";
 
 const ProductForm = () => {
-  const { control, handleSubmit, reset } = useForm<IProduct>({
+  const { control, handleSubmit, reset } = useForm<Product>({
     defaultValues: {
       name: "",
       category: "",
@@ -23,8 +23,15 @@ const ProductForm = () => {
     description,
     category,
     imageUrl,
-  }: IProduct) => {
-    await api.createProduct(name, price, description, category, imageUrl);
+  }: Product) => {
+    await api.createProduct({
+      id: 0,
+      name,
+      price,
+      description,
+      category,
+      imageUrl,
+    });
 
     alert("Product was added successfully!");
     reset();

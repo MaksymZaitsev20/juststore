@@ -1,27 +1,29 @@
 import { LocalKey } from "ts-localstorage";
-import { IProduct } from "../app/api";
+import { Product } from "../app/api";
+import { DefaultProductImage } from "../constants/images";
 
 export interface IProductsApi {
-  _allProductsKey: LocalKey<Array<IProduct>>;
+  _allProductsKey: LocalKey<Array<Product>>;
   _basketProductsKey: LocalKey<Array<number>>;
 
-  getProducts(): Promise<IProduct[] | []>;
+  getProducts(): Promise<Product[] | []>;
 
-  getProduct(id: number): Promise<IProduct | null>;
+  getProduct(id: number): Promise<Product | null>;
 
-  createProduct(
-    name: string,
-    price: number,
-    description: string,
-    category: string,
-    imageUrl: string
-  ): Promise<void>;
+  createProduct({
+    id = 0,
+    name,
+    price,
+    description,
+    category,
+    imageUrl = DefaultProductImage,
+  }: Product): Promise<void>;
 
-  updateProduct(id: number, newProduct: IProduct): Promise<boolean>;
+  updateProduct(id: number, newProduct: Product): Promise<boolean>;
 
-  deleteProduct(id: number): Promise<IProduct | undefined>;
+  deleteProduct(id: number): Promise<Product | undefined>;
 
-  getBasketProducts(): IProduct[] | [];
+  getBasketProducts(): Product[] | [];
 
   addProductToBasket(id: number): boolean;
 

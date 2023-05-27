@@ -7,9 +7,9 @@ import {
   OneplusImage,
   SamsungGalaxyImage,
 } from "./images";
-import { IProduct } from "../app/api";
+import { Product } from "../app/api";
 
-export const products: IProduct[] = [
+export const products: Product[] = [
   {
     id: 1,
     name: "Cell phone Google Pixel 7 Pro 12/512GB Snow",

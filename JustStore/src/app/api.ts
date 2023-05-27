@@ -9,14 +9,14 @@
 
 // ReSharper disable InconsistentNaming
 
-export class CategoriesClient {
+export class CategoryClient {
   private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
   constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:44386";
+    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
   }
 
   getAllCategories(): Promise<string[]> {
@@ -45,14 +45,7 @@ export class CategoriesClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        if (Array.isArray(resultData200)) {
-          result200 = [] as any;
-          for (let item of resultData200)
-            result200!.push(item);
-        } else {
-          result200 = <any>null;
-        }
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string[];
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -64,14 +57,14 @@ export class CategoriesClient {
   }
 }
 
-export class ProductsClient {
+export class ProductClient {
   private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
   constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:44386";
+    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
   }
 
   getAllProducts(): Promise<Product[]> {
@@ -100,14 +93,7 @@ export class ProductsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        if (Array.isArray(resultData200)) {
-          result200 = [] as any;
-          for (let item of resultData200)
-            result200!.push(Product.fromJS(item));
-        } else {
-          result200 = <any>null;
-        }
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product[];
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -148,9 +134,7 @@ export class ProductsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -190,8 +174,7 @@ export class ProductsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = Product.fromJS(resultData200);
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product;
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -202,7 +185,7 @@ export class ProductsClient {
     return Promise.resolve<Product>(null as any);
   }
 
-  updateProduct(productId: number, product: Product): Promise<FileResponse | null> {
+  updateProduct(productId: number, product: Product): Promise<void> {
     let url_ = this.baseUrl + "/api/products/{productId}";
     if (productId === undefined || productId === null)
       throw new Error("The parameter 'productId' must be defined.");
@@ -215,8 +198,7 @@ export class ProductsClient {
       body: content_,
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/octet-stream"
+        "Content-Type": "application/json"
       }
     };
 
@@ -225,35 +207,26 @@ export class ProductsClient {
     });
   }
 
-  protected processUpdateProduct(response: Response): Promise<FileResponse | null> {
+  protected processUpdateProduct(response: Response): Promise<void> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
       response.headers.forEach((v: any, k: any) => _headers[k] = v);
     }
     ;
-    if (status === 200 || status === 206) {
-      const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-      let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-      let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-      if (fileName) {
-        fileName = decodeURIComponent(fileName);
-      } else {
-        fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-        fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-      }
-      return response.blob().then(blob => {
-        return { fileName: fileName, data: blob, status: status, headers: _headers };
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        return;
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
-    return Promise.resolve<FileResponse | null>(null as any);
+    return Promise.resolve<void>(null as any);
   }
 
-  deleteProduct(productId: number): Promise<FileResponse | null> {
+  deleteProduct(productId: number): Promise<void> {
     let url_ = this.baseUrl + "/api/products/{productId}";
     if (productId === undefined || productId === null)
       throw new Error("The parameter 'productId' must be defined.");
@@ -262,9 +235,7 @@ export class ProductsClient {
 
     let options_: RequestInit = {
       method: "DELETE",
-      headers: {
-        "Accept": "application/octet-stream"
-      }
+      headers: {}
     };
 
     return this.http.fetch(url_, options_).then((_response: Response) => {
@@ -272,32 +243,23 @@ export class ProductsClient {
     });
   }
 
-  protected processDeleteProduct(response: Response): Promise<FileResponse | null> {
+  protected processDeleteProduct(response: Response): Promise<void> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
       response.headers.forEach((v: any, k: any) => _headers[k] = v);
     }
     ;
-    if (status === 200 || status === 206) {
-      const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-      let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-      let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-      if (fileName) {
-        fileName = decodeURIComponent(fileName);
-      } else {
-        fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-        fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-      }
-      return response.blob().then(blob => {
-        return { fileName: fileName, data: blob, status: status, headers: _headers };
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        return;
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
-    return Promise.resolve<FileResponse | null>(null as any);
+    return Promise.resolve<void>(null as any);
   }
 }
 
@@ -308,7 +270,7 @@ export class UserClient {
 
   constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:44386";
+    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
   }
 
   login(username: string): Promise<string> {
@@ -340,9 +302,7 @@ export class UserClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -379,9 +339,7 @@ export class UserClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -393,67 +351,13 @@ export class UserClient {
   }
 }
 
-export class Product implements IProduct {
-  id!: number;
-  name!: string;
-  imageUrl!: string;
-  price!: number;
-  description!: string;
-  category!: string;
-
-  constructor(data?: IProduct) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.id = _data["id"];
-      this.name = _data["name"];
-      this.imageUrl = _data["imageUrl"];
-      this.price = _data["price"];
-      this.description = _data["description"];
-      this.category = _data["category"];
-    }
-  }
-
-  static fromJS(data: any): Product {
-    data = typeof data === "object" ? data : {};
-    let result = new Product();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === "object" ? data : {};
-    data["id"] = this.id;
-    data["name"] = this.name;
-    data["imageUrl"] = this.imageUrl;
-    data["price"] = this.price;
-    data["description"] = this.description;
-    data["category"] = this.category;
-    return data;
-  }
-}
-
-export interface IProduct {
+export interface Product {
   id: number;
   name: string;
   imageUrl: string;
   price: number;
   description: string;
   category: string;
-}
-
-export interface FileResponse {
-  data: Blob;
-  status: number;
-  fileName?: string;
-  headers?: { [name: string]: any };
 }
 
 export class ApiException extends Error {

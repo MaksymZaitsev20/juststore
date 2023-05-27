@@ -1,11 +1,11 @@
 import { Stack, Typography } from "@mui/material";
-import { IProduct } from "../app/api";
+import { Product } from "../app/api";
 import { useAppSelector } from "../app/hooks";
 import BasketProductCard from "../components/BasketProductCard";
 import { api } from "../productsApi";
 
 const Basket = () => {
-  const products: IProduct[] | [] = api.getBasketProducts();
+  const products: Product[] | [] = api.getBasketProducts();
   const price = products
     .map((product) => product.price)
     .reduce((sum, price) => sum + price, 0);

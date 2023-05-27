@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../productsApi";
-import { IProduct } from "./api";
+import { Product } from "./api";
 
 export interface CatalogState {
-  products: IProduct[];
+  products: Product[];
 }
 
 const initialState: CatalogState = {
@@ -14,15 +14,14 @@ export const catalogSlice = createSlice({
   name: "catalog",
   initialState,
   reducers: {
-    createProduct: (state, action: PayloadAction<IProduct>) => {
+    createProduct: (state, action: PayloadAction<Product>) => {
       if (!state.products.includes(action.payload)) {
         state.products.push(action.payload);
 
-        const { name, price, description, category, imageUrl } = action.payload;
-        api.createProduct(name, price, description, category, imageUrl);
+        api.createProduct(action.payload);
       }
     },
-    deleteProduct: (state, action: PayloadAction<IProduct>) => {
+    deleteProduct: (state, action: PayloadAction<Product>) => {
       state.products = state.products.filter(
         (product) => product !== action.payload
       );

@@ -1,39 +1,39 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IProduct } from "../app/api";
-import { productsClient } from "../app/clients";
+import { Product } from "../app/api";
+import { productClient } from "../app/clients";
 
-export const experimentApi = createApi({
-  reducerPath: "experimentApi",
+export const productApi = createApi({
+  reducerPath: "productApi",
   baseQuery: fakeBaseQuery(),
   tagTypes: ["Product", "Products"],
   endpoints: (builder) => ({
-    getProductById: builder.query<IProduct, number>({
+    getProductById: builder.query<Product, number>({
       queryFn: async (id: number) => ({
-        data: await productsClient.getProduct(id),
+        data: await productClient.getProduct(id),
       }),
       providesTags: ["Product"],
     }),
-    getAllProducts: builder.query<IProduct[], void>({
+    getAllProducts: builder.query<Product[], void>({
       queryFn: async () => ({
-        data: await productsClient.getAllProducts(),
+        data: await productClient.getAllProducts(),
       }),
       providesTags: ["Products"],
     }),
-    createProduct: builder.mutation<void, IProduct>({
-      queryFn: async (product: IProduct, api) => ({
-        data: await productsClient.createProduct(product),
+    createProduct: builder.mutation<number, Product>({
+      queryFn: async (product: Product, api) => ({
+        data: await productClient.createProduct(product),
       }),
       invalidatesTags: ["Products", "Product"],
     }),
-    updateProduct: builder.mutation<void, IProduct>({
-      queryFn: async (product: IProduct, api) => ({
-        data: await productsClient.updateProduct(product),
+    updateProduct: builder.mutation<void, Product>({
+      queryFn: async (product: Product, api) => ({
+        data: await productClient.updateProduct(product.id, product),
       }),
       invalidatesTags: ["Products", "Product"],
     }),
     deleteProductById: builder.mutation<void, number>({
       queryFn: async (id: number, api) => ({
-        data: await productsClient.deleteProduct(id),
+        data: await productClient.deleteProduct(id),
       }),
       invalidatesTags: ["Products", "Product"],
     }),
@@ -46,6 +46,6 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductByIdMutation,
-} = experimentApi;
+} = productApi;
 
-export default experimentApi;
+export default productApi;

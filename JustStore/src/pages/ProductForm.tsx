@@ -2,30 +2,29 @@ import { Button, Container, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { api } from "../productsApi";
-
-interface IFormInput {
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-}
+import { IProduct } from "../api/api";
 
 const ProductForm = () => {
-  const { control, handleSubmit, reset } = useForm<IFormInput>({
+  const { control, handleSubmit, reset } = useForm<IProduct>({
     defaultValues: {
       name: "",
       category: "",
       description: "",
       price: 0,
-      imageUrl: ""
+      imageUrl: "",
     },
   });
 
   const navigate = useNavigate();
 
-  const onSubmit = async (product: IFormInput) => {
-    await api.createProduct(product.name, product.category.toLowerCase(), product.price, product.imageUrl);
+  const onSubmit = async ({
+    name,
+    price,
+    description,
+    category,
+    imageUrl,
+  }: IProduct) => {
+    await api.createProduct(name, price, description, category, imageUrl);
 
     alert("Product was added successfully!");
     reset();

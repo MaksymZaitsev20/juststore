@@ -1,9 +1,9 @@
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import CatalogProductCard from "../components/CatalogProductCard";
-import { IProduct } from "../models/Product";
 import { api } from "../productsApi";
 import SideBar from "../components/SideBar";
+import { IProduct } from "../api/api";
 
 const Home = () => {
   const [products, setProducts] = useState<IProduct[] | []>([]);

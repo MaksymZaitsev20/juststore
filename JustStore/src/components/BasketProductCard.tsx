@@ -6,7 +6,7 @@ import { Button, CardActionArea, CardActions } from "@mui/material";
 import { FC } from "react";
 import { useAppDispatch } from "../app/hooks";
 import { removeFromBasket } from "../app/Basket";
-import { DefaultProduct } from "../constants/images";
+import { DefaultProductImage } from "../constants/images";
 
 interface IProps {
   id: number;
@@ -32,7 +32,7 @@ const BasketProductCard: FC<IProps> = (props: IProps) => {
           height="170"
           src={props.imageUrl}
           alt={props.title}
-          onError={(event) => (event.currentTarget.src = DefaultProduct)}
+          onError={(event) => (event.currentTarget.src = DefaultProductImage)}
           sx={{
             objectFit: "contain",
             width: "150px",

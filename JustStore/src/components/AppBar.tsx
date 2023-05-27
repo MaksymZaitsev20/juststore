@@ -26,9 +26,7 @@ const pages: IPage[] = [
 ];
 
 const ResponsiveAppBar: React.FC = () => {
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -148,6 +146,6 @@ const ResponsiveAppBar: React.FC = () => {
       </Container>
     </AppBar>
   );
-}
+};
 
 export default ResponsiveAppBar;

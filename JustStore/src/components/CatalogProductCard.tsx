@@ -6,7 +6,7 @@ import { Button, CardActionArea, CardActions } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { addToBasket, removeFromBasket } from "../app/Basket";
-import { DefaultProduct } from "../constants/images";
+import { DefaultProductImage } from "../constants/images";
 
 interface IProps {
   id: number;
@@ -49,7 +49,7 @@ const CatalogProductCard: FC<IProps> = (props: IProps) => {
           height="170px"
           src={props.imageUrl}
           onError={(event: React.SyntheticEvent<HTMLImageElement, Event>) =>
-            (event.currentTarget.src = DefaultProduct)
+            (event.currentTarget.src = DefaultProductImage)
           }
           alt={props.title}
           sx={{

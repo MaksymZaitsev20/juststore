@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Repositories.Categories;
 
-public interface ICategoriesRepository
+public interface ICategoryRepository
 {
     public Task<IEnumerable<string>> GetAllCategoriesAsync();
     public Task<int?> GetCategoryIdAsync(string categoryName);

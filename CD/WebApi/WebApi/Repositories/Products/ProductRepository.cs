@@ -5,12 +5,12 @@ using WebApi.Repositories.Categories;
 
 namespace WebApi.Repositories.Products;
 
-public class ProductsRepository : IProductsRepository
+public class ProductRepository : IProductRepository
 {
     private readonly IConfiguration _configuration;
-    private readonly ICategoriesRepository _categoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public ProductsRepository(IConfiguration configuration, ICategoriesRepository repository)
+    public ProductRepository(IConfiguration configuration, ICategoryRepository repository)
     {
         _configuration = configuration;
         _categoryRepository = repository;

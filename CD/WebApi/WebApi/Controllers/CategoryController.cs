@@ -5,16 +5,17 @@ namespace WebApi.Controllers;
 
 [Route("api/categories")]
 [ApiController]
-public class CategoriesController : ControllerBase
+public class CategoryController : ControllerBase
 {
-    private readonly ICategoriesRepository _repository;
+    private readonly ICategoryRepository _repository;
 
-    public CategoriesController(ICategoriesRepository repository)
+    public CategoryController(ICategoryRepository repository)
     {
         _repository = repository;
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<string>), 200)]
     public async Task<ActionResult<IEnumerable<string>>> GetAllCategories()
     {
         var categories = await _repository.GetAllCategoriesAsync();

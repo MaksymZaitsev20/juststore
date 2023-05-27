@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 
 namespace WebApi.Repositories.Categories;
 
-public class CategoriesRepository : ICategoriesRepository
+public class CategoryRepository : ICategoryRepository
 {
     private readonly IConfiguration _configuration;
 
-    public CategoriesRepository(IConfiguration configuration)
+    public CategoryRepository(IConfiguration configuration)
     {
         _configuration = configuration;
     }

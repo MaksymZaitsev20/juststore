@@ -2,7 +2,7 @@
 
 namespace WebApi.Repositories.Products;
 
-public interface IProductsRepository
+public interface IProductRepository
 {
     public Task<IEnumerable<Product>> GetAllProductsAsync();
     public Task<Product> GetProductAsync(int productId);

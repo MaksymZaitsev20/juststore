@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 using WebApi.Repositories.Products;
 
@@ -7,7 +6,6 @@ namespace WebApi.Controllers;
 
 [Route("api/products")]
 [ApiController]
-[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductRepository _productRepository;

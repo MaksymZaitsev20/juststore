@@ -1,15 +1,18 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import basketReducer from "./Basket";
 import productApi from "../api/productApi";
+import categoryApi from "../api/categoryApi";
 
 export const store = configureStore({
   reducer: {
     basket: basketReducer,
     [productApi.reducerPath]: productApi.reducer,
+    [categoryApi.reducerPath]: categoryApi.reducer,
   },
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(productApi.middleware)
+      .concat(categoryApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

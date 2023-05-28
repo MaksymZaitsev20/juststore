@@ -1,8 +1,8 @@
 import { Button, Container, Stack, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { api } from "../productsApi";
 import { Product } from "../app/api";
+import { useCreateProductMutation } from "../api/productApi";
 
 const ProductForm = () => {
   const { control, handleSubmit, reset } = useForm<Product>({
@@ -16,6 +16,7 @@ const ProductForm = () => {
   });
 
   const navigate = useNavigate();
+  const [createProduct] = useCreateProductMutation();
 
   const onSubmit = async ({
     name,
@@ -24,7 +25,7 @@ const ProductForm = () => {
     category,
     imageUrl,
   }: Product) => {
-    await api.createProduct({
+    createProduct({
       id: 0,
       name,
       price,

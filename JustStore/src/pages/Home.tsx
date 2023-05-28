@@ -1,30 +1,26 @@
 import { Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import CatalogProductCard from "../components/CatalogProductCard";
-import { api } from "../productsApi";
 import SideBar from "../components/SideBar";
 import { Product } from "../app/api";
+import { useGetAllProductsQuery } from "../api/productApi";
 
 const Home = () => {
-  const [products, setProducts] = useState<Product[] | []>([]);
   const [category, setCategory] = useState<string>("");
+  const [products, setProducts] = useState<Product[] | []>([]);
+  const { data: allProducts = [] } = useGetAllProductsQuery();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const products = await api.getProducts();
-      const filteredProducts = products.filter(
-        (product) => product.category === category
-      );
+    const filteredProducts = allProducts.filter(
+      (product) => product.category === category
+    );
 
-      if (filteredProducts.length) {
-        setProducts(filteredProducts);
-      } else {
-        setProducts(products!);
-      }
-    };
-
-    fetchData();
-  }, [category]);
+    if (filteredProducts.length) {
+      setProducts(filteredProducts);
+    } else {
+      setProducts(allProducts!);
+    }
+  }, [category, allProducts]);
 
   return (
     <Stack direction="row" minHeight="537px">

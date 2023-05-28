@@ -1,11 +1,21 @@
 import { Stack, Typography } from "@mui/material";
-import { Product } from "../app/api";
 import { useAppSelector } from "../app/hooks";
 import BasketProductCard from "../components/BasketProductCard";
 import { api } from "../productsApi";
+import { useGetAllProductsQuery } from "../api/productApi";
+import { Product } from "../app/api";
 
 const Basket = () => {
-  const products: Product[] | [] = api.getBasketProducts();
+  const productIds: number[] = api.getBasketProducts();
+  const { data: allProducts = [] } = useGetAllProductsQuery();
+  let products: Product[];
+
+  if (productIds.length) {
+    products = allProducts.filter((product) => productIds.includes(product.id));
+  } else {
+    products = [];
+  }
+
   const price = products
     .map((product) => product.price)
     .reduce((sum, price) => sum + price, 0);

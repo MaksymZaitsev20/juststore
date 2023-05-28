@@ -6,389 +6,355 @@
 
 /* tslint:disable */
 /* eslint-disable */
-
 // ReSharper disable InconsistentNaming
 
 export class CategoryClient {
-  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-    this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-  }
-
-  getAllCategories(): Promise<string[]> {
-    let url_ = this.baseUrl + "/api/categories";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetAllCategories(_response);
-    });
-  }
-
-  protected processGetAllCategories(response: Response): Promise<string[]> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string[];
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    getAllCategories(): Promise<string[]> {
+        let url_ = this.baseUrl + "/api/categories";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllCategories(_response);
+        });
     }
-    return Promise.resolve<string[]>(null as any);
-  }
+
+    protected processGetAllCategories(response: Response): Promise<string[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string[]>(null as any);
+    }
 }
 
 export class ProductClient {
-  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-    this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-  }
-
-  getAllProducts(): Promise<Product[]> {
-    let url_ = this.baseUrl + "/api/products";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetAllProducts(_response);
-    });
-  }
-
-  protected processGetAllProducts(response: Response): Promise<Product[]> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product[];
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    getAllProducts(): Promise<Product[]> {
+        let url_ = this.baseUrl + "/api/products";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllProducts(_response);
+        });
     }
-    return Promise.resolve<Product[]>(null as any);
-  }
 
-  createProduct(product: Product): Promise<number> {
-    let url_ = this.baseUrl + "/api/products";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(product);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processCreateProduct(_response);
-    });
-  }
-
-  protected processCreateProduct(response: Response): Promise<number> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    protected processGetAllProducts(response: Response): Promise<Product[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product[]>(null as any);
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    createProduct(product: Product): Promise<number> {
+        let url_ = this.baseUrl + "/api/products";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(product);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateProduct(_response);
+        });
     }
-    return Promise.resolve<number>(null as any);
-  }
 
-  getProduct(productId: number): Promise<Product> {
-    let url_ = this.baseUrl + "/api/products/{productId}";
-    if (productId === undefined || productId === null)
-      throw new Error("The parameter 'productId' must be defined.");
-    url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetProduct(_response);
-    });
-  }
-
-  protected processGetProduct(response: Response): Promise<Product> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    protected processCreateProduct(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product;
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    getProduct(productId: number): Promise<Product> {
+        let url_ = this.baseUrl + "/api/products/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProduct(_response);
+        });
     }
-    return Promise.resolve<Product>(null as any);
-  }
 
-  updateProduct(productId: number, product: Product): Promise<void> {
-    let url_ = this.baseUrl + "/api/products/{productId}";
-    if (productId === undefined || productId === null)
-      throw new Error("The parameter 'productId' must be defined.");
-    url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(product);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processUpdateProduct(_response);
-    });
-  }
-
-  protected processUpdateProduct(response: Response): Promise<void> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    protected processGetProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Product;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(null as any);
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        return;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    updateProduct(productId: number, product: Product): Promise<void> {
+        let url_ = this.baseUrl + "/api/products/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(product);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProduct(_response);
+        });
     }
-    return Promise.resolve<void>(null as any);
-  }
 
-  deleteProduct(productId: number): Promise<void> {
-    let url_ = this.baseUrl + "/api/products/{productId}";
-    if (productId === undefined || productId === null)
-      throw new Error("The parameter 'productId' must be defined.");
-    url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "DELETE",
-      headers: {}
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeleteProduct(_response);
-    });
-  }
-
-  protected processDeleteProduct(response: Response): Promise<void> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    protected processUpdateProduct(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        return;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    deleteProduct(productId: number): Promise<void> {
+        let url_ = this.baseUrl + "/api/products/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProduct(_response);
+        });
     }
-    return Promise.resolve<void>(null as any);
-  }
+
+    protected processDeleteProduct(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
 }
 
 export class UserClient {
-  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-    this.http = http ? http : window as any;
-    this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-  }
-
-  login(username: string): Promise<string> {
-    let url_ = this.baseUrl + "/api/account/user/Login/{username}";
-    if (username === undefined || username === null)
-      throw new Error("The parameter 'username' must be defined.");
-    url_ = url_.replace("{username}", encodeURIComponent("" + username));
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "POST",
-      headers: {
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processLogin(_response);
-    });
-  }
-
-  protected processLogin(response: Response): Promise<string> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    login(username: string): Promise<string> {
+        let url_ = this.baseUrl + "/api/account/user/Login/{username}";
+        if (username === undefined || username === null)
+            throw new Error("The parameter 'username' must be defined.");
+        url_ = url_.replace("{username}", encodeURIComponent("" + username));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
     }
-    return Promise.resolve<string>(null as any);
-  }
 
-  logout(): Promise<string> {
-    let url_ = this.baseUrl + "/api/account/user/Logout";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "POST",
-      headers: {
-        "Accept": "application/json"
-      }
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processLogout(_response);
-    });
-  }
-
-  protected processLogout(response: Response): Promise<string> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    protected processLogin(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
     }
-    ;
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-      });
+
+    logout(): Promise<string> {
+        let url_ = this.baseUrl + "/api/account/user/Logout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogout(_response);
+        });
     }
-    return Promise.resolve<string>(null as any);
-  }
+
+    protected processLogout(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
+    }
 }
 
 export interface Product {
-  id: number;
-  name: string;
-  imageUrl: string;
-  price: number;
-  description: string;
-  category: string;
+    id: number;
+    name: string;
+    imageUrl: string;
+    price: number;
+    description: string;
+    category: string;
 }
 
 export class ApiException extends Error {
-  override message: string;
-  status: number;
-  response: string;
-  headers: { [key: string]: any; };
-  result: any;
+    override message: string;
+    status: number;
+    response: string;
+    headers: { [key: string]: any; };
+    result: any;
 
-  constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
-    super();
+    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+        super();
 
-    this.message = message;
-    this.status = status;
-    this.response = response;
-    this.headers = headers;
-    this.result = result;
-  }
+        this.message = message;
+        this.status = status;
+        this.response = response;
+        this.headers = headers;
+        this.result = result;
+    }
 
-  protected isApiException = true;
+    protected isApiException = true;
 
-  static isApiException(obj: any): obj is ApiException {
-    return obj.isApiException === true;
-  }
+    static isApiException(obj: any): obj is ApiException {
+        return obj.isApiException === true;
+    }
 }
 
-function throwException(message: string, status: number, response: string, headers: {
-  [key: string]: any;
-}, result?: any): any {
-  if (result !== null && result !== undefined)
-    throw result;
-  else
-    throw new ApiException(message, status, response, headers, null);
+function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+    if (result !== null && result !== undefined)
+        throw result;
+    else
+        throw new ApiException(message, status, response, headers, null);
 }

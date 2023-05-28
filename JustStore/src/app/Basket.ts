@@ -6,7 +6,7 @@ export interface BasketState {
 }
 
 const initialState: BasketState = {
-  products: api.getBasketProducts().map((product) => product.id),
+  products: api.getBasketProducts(),
 };
 
 export const basketSlice = createSlice({
